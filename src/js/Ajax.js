@@ -1,3 +1,15 @@
+//Creates a Promise from an ajax request
+//Options is formatted as follows:
+//{
+//    url,
+//    method,
+//    body,
+//    responseType,
+//    mimeType,
+//    timeout,
+//    headers: [key, value]
+//}
+
 const Ajax = function(options) {
     return new Promise((resolve) => {
         let xhr = new XMLHttpRequest()
@@ -11,6 +23,7 @@ const Ajax = function(options) {
     })
 }
 
+//The following functions force the method to a specific value
 Ajax.Get = function(options) => {
     return Ajax(Object.assign(options, {method: "GET"}))
 }
@@ -27,16 +40,18 @@ Ajax.Delete = function(options) => {
     return Ajax(Object.assign(options, {method: "DELETE"}))
 }
 
+
+//The following functions do the same as above, but additionally forces the response to be JSON, as well as the body, if applicable
 Ajax.GetJSON = function(options) => {
     return Ajax(Object.assign(options, {method: "GET", mimeType: "application/json", responseType: "json"}))
 }
 
 Ajax.PostJSON = function(options) => {
-    return Ajax(Object.assign(options, {method: "POST", mimeType: "application/json", responseType: "json"}))
+    return Ajax(Object.assign(options, {method: "POST", mimeType: "application/json", responseType: "json", headers: {"Content-Type": "application/json"}}}))
 }
 
 Ajax.PutJSON = function(options) => {
-    return Ajax(Object.assign(options, {method: "PUT", mimeType: "application/json", responseType: "json"}))
+    return Ajax(Object.assign(options, {method: "PUT", mimeType: "application/json", responseType: "json", headers: {"Content-Type": "application/json"}}))
 }
 
 Ajax.DeleteJSON = function(options) => {
