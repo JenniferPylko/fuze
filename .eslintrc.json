@@ -1,7 +1,13 @@
 {
     "parserOptions": {
         "ecmaVersion": 8,
-        "sourceType": "module"
+        "sourceType": "module",
+        "ecmaFeatures": {
+        	"impliedStrict": true
+        }
+    },
+    "globals": {
+    	"Promise": false
     },
     "env": {
     	"browser": true,
@@ -15,7 +21,8 @@
         "valid-jsdoc": ["error"],
         "require-jsdoc": ["error", {"require": {
     		"FunctionDeclaration": true,
-    		"ClassDeclaration": true
+    		"ClassDeclaration": true,
+    		"MethodDefinition": true
         }}],
         "block-scoped-var": ["error"],
         "class-methods-use-this": ["error"],
@@ -63,7 +70,7 @@
         "computed-property-spacing": ["error"],
         "eol-last": ["error"],
         "func-call-spacing": ["error"],
-        "func-names": ["never"],
+        "func-names": ["error", "never"],
         "func-style": ["error", "expression", {"allowArrowFunctions": true}],
         "function-paren-newline": ["error", "never"],
         "indent": ["error", 4],
