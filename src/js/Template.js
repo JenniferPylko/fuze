@@ -10,5 +10,7 @@ const Template = function(strings, vars) {
             default:
                 return v
         }
-    }
+    })
 }
+
+module.exports = Template
