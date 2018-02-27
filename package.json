@@ -4,7 +4,8 @@
   "description": "Simple, lightweight JavaScript framework for creating interactive websites",
   "main": "src/js/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "eslint src/js/**/*",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,14 @@
   "bugs": {
     "url": "https://github.com/brpylko/fuze/issues"
   },
-  "homepage": "https://github.com/brpylko/fuze#readme"
+  "homepage": "https://github.com/brpylko/fuze#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.3",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.18.1",
+    "path": "^0.12.7",
+    "webpack": "^4.0.1",
+    "webpack-cli": "^2.0.9"
+  }
 }
