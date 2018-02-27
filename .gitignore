@@ -38,3 +38,6 @@ jspm_packages
 
 #Gedit temp files
 *~
+
+# jetbrains ide folders
+.idea
