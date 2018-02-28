@@ -1,6 +1,9 @@
 // Variables outside of the class to ensure that they are "private"
-let instance = null
-let routes, urlMod, navType, basePath
+let instance = false
+let routes
+let urlMod
+let navType
+let basePath
 const navTypeValues = ["path", "hash"]
 const listenerFunction = () => {
     //useful stuff:
@@ -18,22 +21,28 @@ const listenerFunction = () => {
     }
     routes[route].load()
 }
-
+/**
+ * Singleton class to handle routing.
+ */
 class Route {
+    /**
+     * Route constructor, only allows one instance
+     */
     constructor() {
         if (instance) {
             throw new Error("Routing can only be initialized once.")
         }
         routes = {}
-        instance = this
+        instance = true
     }
 
     /**
      * initialization of Fuze routing
-     * @param settings object containing all settings
+     * @param {Object} settings object containing all settings
      *          urlMod: bool determines if url should be modified
      *          navType: string with one of the following values: ["hash", "path"]
      *          basePath: string to represent base path of url to derive actual path from
+     * @returns {void}
      */
     static init(settings) {
         if (instance) {
@@ -42,15 +51,15 @@ class Route {
         }
         new Route()
         // Set urlMod value, default to True
-        urlMod = ("urlMod" in settings ? settings["urlMod"] : true)
+        urlMod = ("urlMod" in settings ? settings.urlMod : true)
         // Set navType value, if navType or basePath is set,
-        navType = ("navType" in settings && settings["navType"] in navTypeValues ? settings["navType"] : ("basePath" in settings ? "path" : "hash"))
+        navType = ("navType" in settings && settings.navType in navTypeValues ? settings.navType : ("basePath" in settings ? "path" : "hash"))
         // set basePath value, default to "", if true, set basePath to currentPath
         if ("basePath" in settings && navType != "hash") {
-            if (typeof settings["basePath"] === "boolean" && settings["basePath"]) {
+            if (typeof settings.basePath === "boolean" && settings.basePath) {
                 basePath = location.pathname
             } else {
-                basePath = settings["basePath"] || ""
+                basePath = settings.basePath || ""
             }
         } else {
             basePath = ""
@@ -59,8 +68,9 @@ class Route {
 
     /**
      * registers route to the route obj accessed via Route class
-     * @param obj object that contains load() method to be added to routing
-     * @param route string representing route that causes obj to load
+     * @param {Object} obj object that contains load() method to be added to routing
+     * @param {String} route string representing route that causes obj to load
+     * @returns {void}
      */
     static register(obj, route) {
         // If instance does not yet exist, create one using default values
@@ -76,7 +86,8 @@ class Route {
 
     /**
      * Removes route from registered routes
-     * @param route string representing route to be removed
+     * @param {String} route string representing route to be removed
+     * @returns {void}
      */
     static unRegister(route) {
         delete routes[route]
@@ -84,7 +95,8 @@ class Route {
 
     /**
      * Loads provided route
-     * @param route route that has already been registered to load
+     * @param {String} route route that has already been registered to load
+     * @returns {void}
      */
     static go(route) {
         if (urlMod) {
@@ -93,11 +105,20 @@ class Route {
         routes[route].load()
     }
 
+    /**
+     * Attaches popstate event listener
+     * @param {String} route Optional, the route to navigate to
+     * @returns {void}
+     */
     static attachListener(route) {
         route && Route.go(route)
         document.addEventListener("popstate", listenerFunction)
     }
 
+    /**
+     * Detaches popstate event listener
+     * @returns {void}
+     */
     static detachListener() {
         document.removeEventListener("popstate", listenerFunction)
     }

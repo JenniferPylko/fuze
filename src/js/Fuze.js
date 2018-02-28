@@ -1,5 +1,5 @@
-exports.Ajax = require("./Ajax")
+exports.ajax = require("./Ajax")
 exports.Model = require("./Model")
 exports.View = require("./View")
 exports.Route = require("./Route")
-exports.Template = require("./Template")
+exports.template = require("./Template")

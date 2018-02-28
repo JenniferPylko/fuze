@@ -4,7 +4,8 @@
   "description": "Simple, lightweight JavaScript framework for creating interactive websites",
   "main": "src/js/index.js",
   "scripts": {
-    "test": "eslint src/js/**/*",
+    "test": "eslint src/js/**/*.js",
+    "eslint-auto-fix": "eslint src/js/**/*.js --fix",
     "build": "webpack"
   },
   "repository": {
