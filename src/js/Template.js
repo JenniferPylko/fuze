@@ -1,4 +1,4 @@
-const Template = function(strings, vars) {
+const template = function(strings, vars) {
     return strings[0] + vars.map((v) => {
         switch (typeof v) {
         case "function":
@@ -13,4 +13,4 @@ const Template = function(strings, vars) {
     })
 }
 
-module.exports = Template
+module.exports = template
