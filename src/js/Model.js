@@ -3,28 +3,38 @@
  * Format of route objects: {name, url, method}
  */
 class Model {
-	constructor(routes, fields) {
-		this.fields = fields || []
-		for (let route of routes) {
-			this[route.name] = async (data, fetchOptions) => {
-				let response = await fetch(route.url, Object.assign(fetchOptions, {method: route.method, body: Object.assign(this.toJSON(), data)}))
-				let obj = await response.json()
-				for (let field in obj) {
-					if (obj.hasOwnProperty(field)) {
-						this[field] = obj[field]
-					}
-				}
-				return response
-			}
-		}
-	}
-	toJSON() {
-		let json = {}
-		for (let field of this.fields) {
-			json[field] = this[field]
-		}
-		return json
-	}
+    /**
+     * Constructs a Model instance with the specified routes and fields
+     * @param {Array} routes The list of routes to register to this model
+     * @param {Array} fields The list of fields this model has
+     */
+    constructor(routes, fields) {
+        this.fields = fields || []
+        for (const route of routes) {
+            this[route.name] = async (data, fetchOptions) => {
+                const response = await fetch(route.url, Object.assign(fetchOptions, {method: route.method, body: Object.assign(this.toJSON(), data)}))
+                const obj = await response.json()
+                for (const field in obj) {
+                    if (obj.hasOwnProperty(field)) {
+                        this[field] = obj[field]
+                    }
+                }
+                return response
+            }
+        }
+    }
+
+    /**
+     * Converts this model to a simple object
+     * @returns {Object} This model as a simple object with only the fields specified in the constructor
+     */
+    toJSON() {
+        const json = {}
+        for (const field of this.fields) {
+            json[field] = this[field]
+        }
+        return json
+    }
 }
 
 module.exports = Model

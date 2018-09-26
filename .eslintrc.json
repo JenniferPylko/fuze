@@ -17,7 +17,6 @@
     "rules": {
         "getter-return": ["error"],
         "semi": ["error", "never"],
-        "no-prototype-builtins": ["error"],
         "valid-jsdoc": ["error"],
         "require-jsdoc": ["error", {"require": {
     		"FunctionDeclaration": true,
