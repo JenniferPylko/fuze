@@ -2,26 +2,59 @@
  * Used to communicate with a server's API routes and store data in an object.\
  * Format of route objects: {name, url, method}
  */
-class Model {
+class Model extends EventTarget {
     /**
      * Constructs a Model instance with the specified routes and fields
      * @param {Array} routes The list of routes to register to this model
      * @param {Array} fields The list of fields this model has
      */
     constructor(routes, fields) {
-        this.fields = fields || []
+        super()
+        this.fields = []
+        this.internalValues = {}
+        this.events = []
         for (const route of routes) {
-            this[route.name] = async (data, fetchOptions) => {
-                const response = await fetch(route.url, Object.assign(fetchOptions, {method: route.method, body: Object.assign(this.toJSON(), data)}))
-                const obj = await response.json()
-                for (const field in obj) {
-                    if (obj.hasOwnProperty(field)) {
-                        this[field] = obj[field]
-                    }
-                }
-                return response
-            }
+            this.addRoute(route)
         }
+        for (const field of fields) {
+            this.addField(field)
+        }
+    }
+
+    /**
+     * Defines a new route for the Model
+     * @param {Object} route defines the route to create
+     * @returns {void}
+     */
+    addRoute(route) {
+        this[route.name] = async (data, fetchOptions) => {
+            const response = await fetch(route.url, Object.assign(fetchOptions, {method: route.method, body: Object.assign(this.toJSON(), data)}))
+            const obj = await response.json()
+            for (const field in obj) {
+                if (obj.hasOwnProperty(field)) {
+                    this[field] = obj[field]
+                }
+            }
+            this.dispatchEvent(new CustomEvent(route.name, {detail: response}))
+            return response
+        }
+    }
+
+    /**
+     * Adds a new field to this Model
+     * @param {String} field The name of the field
+     * @returns {void}
+     */
+    addField(field) {
+        this.fields.push(field)
+        Object.defineProperty(this, field, {
+            set [field](value) {
+                this.internalValues[field] = value; this.dispatchEvent(new CustomEvent("update", {detail: {field, value}}))
+            },
+            get [field]() {
+                return this.internalValues[field]
+            }
+        })
     }
 
     /**
