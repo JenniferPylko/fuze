@@ -12,7 +12,7 @@ class View extends HTMLElement {
         this.shadowTemplate = shadowTemplate
         this.templateVars = templateVars
         this.shadowTemplate && this.attachShadow({mode: "open"})
-        render && this.render()
+        render && this.render(this.templateVars)
     }
 
     /**
