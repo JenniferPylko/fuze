@@ -26,7 +26,7 @@ class Collection extends Array {
         }
         if (saveRoute) {
             this.save = async (fetchOptions) => {
-                const response = await fetch(fetchRoute.url, Object.assign({method: "POST", body: this.map((model) => model.toJSON())}, Object.assign(fetchOptions || {}, fetchRoute.options || {})))
+                const response = await fetch(fetchRoute.url, Object.assign({method: "POST", body: this}, Object.assign(fetchOptions || {}, fetchRoute.options || {})))
                 this.dispatchEvent(new CustomEvent("save", {detail: response}))
                 return response
             }
