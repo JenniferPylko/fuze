@@ -1,5 +1,5 @@
 /**
- * Used to communicate with a server's API routes and store data in an object.\
+ * Used to communicate with a server's API routes and store data in an object.
  * Format of route objects: {name, url, method}
  */
 class Model extends EventTarget {
@@ -28,10 +28,10 @@ class Model extends EventTarget {
      */
     addRoute(route) {
         this[route.name] = async (data, fetchOptions) => {
-            const response = await fetch(route.url, Object.assign(fetchOptions, {method: route.method, body: Object.assign(this.toJSON(), data)}))
+            const response = await fetch(route.url, Object.assign(fetchOptions || {}, {method: route.method || "GET", body: Object.assign(this, data || {})}))
             const obj = await response.json()
             for (const field in obj) {
-                if (obj.hasOwnProperty(field)) {
+                if (obj.hasOwnProperty(field) && this.fields.includes(field)) {
                     this[field] = obj[field]
                 }
             }
@@ -67,6 +67,17 @@ class Model extends EventTarget {
             json[field] = this[field]
         }
         return json
+    }
+
+    /**
+     * Replaces this model's data with data from a json object
+     * @param {Object} json The object to use as this model's data
+     * @returns {void}
+     */
+    fromJSON(json) {
+        for (const field of this.fields) {
+            this.internalValues[field] = json[field]
+        }
     }
 }
 
